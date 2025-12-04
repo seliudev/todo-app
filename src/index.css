@@ -1,1 +1,9 @@
 @import "tailwindcss";
+
+@layer utilities {
+    .font-grace {
+        font-family: "Covered By Your Grace", cursive;
+    }
+}
+
+
