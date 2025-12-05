@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 
 interface Todo {
     id: number;
@@ -8,6 +8,24 @@ interface Todo {
 const App = () => {
     const [todos, setTodos] = useState<Todo[]>([]);
     const [input, setInput] = useState("");
+
+    // local storage
+    useEffect(() => {
+        const loadTodos = () => {
+            const saved = localStorage.getItem("todos");
+            if (saved) {
+                setTodos(JSON.parse(saved));
+            }
+        };
+
+        loadTodos();
+    }, []);
+
+    useEffect(() => {
+        if (todos.length === 0) return;
+        localStorage.setItem("todos", JSON.stringify(todos));
+    }, [todos]);
+
 
     const addTodo = () => {
         if (!input.trim()) return;
@@ -30,9 +48,9 @@ const App = () => {
                 <h1 className="text-3xl text-black font-bold mb-4 font-grace">Todo List</h1>
 
                 {/* Input */}
-                <div className="flex gap-2 mb-4 mt-10">
+                <div className="flex justify-between gap-2 mb-4 mt-10 w-full">
                     <input
-                        className="flex-1 rounded px-3 py-2 mr-5 outline-none focus:outline-none"
+                        className="flex-1 rounded px-3 py-2 mr-5 outline-none  border border-transparent focus:border-blue-500 focus:ring-2 focus:ring-blue-400 transition"
                         value={input}
                         onChange={(e) => setInput(e.target.value)}
                         placeholder="Add a todo..."
@@ -43,7 +61,7 @@ const App = () => {
 
                     <button
                         onClick={addTodo}
-                        className="bg-blue-600 text-white px-4 py-1 mt-1 mr-6 rounded hover:cursor-pointer w-8 h-8 flex items-center justify-center"
+                        className="bg-blue-600 text-white px-4 py-1 mt-1 mr-2.5 rounded hover:cursor-pointer w-8 h-8 flex items-center justify-center"
                     >
                         <p className="font-medium text-xl">+</p>
                     </button>
